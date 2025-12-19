@@ -1,0 +1,142 @@
+.search-container {
+  max-width: 800px;
+  margin: -30px auto 30px;
+  padding: 0 20px;
+  position: relative;
+  z-index: 10;
+}
+
+.search-form {
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.search-input-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 15px 20px;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #10B981;
+}
+
+.search-input:disabled {
+  background: #f9fafb;
+  cursor: not-allowed;
+}
+
+.search-button {
+  background: #10B981;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+  min-width: 120px;
+}
+
+.search-button:hover:not(:disabled) {
+  background: #059669;
+}
+
+.search-button:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.loading-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.loading-text::after {
+  content: '';
+  width: 16px;
+  height: 16px;
+  border: 2px solid white;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.search-options {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.location-button {
+  background: #3B82F6;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.3s;
+  align-self: flex-start;
+}
+
+.location-button:hover:not(:disabled) {
+  background: #2563EB;
+}
+
+.location-button:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.quick-searches {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.quick-searches span {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.quick-search-button {
+  background: #f3f4f6;
+  color: #374151;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.quick-search-button:hover:not(:disabled) {
+  background: #10B981;
+  color: white;
+}
+
+.quick-search-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

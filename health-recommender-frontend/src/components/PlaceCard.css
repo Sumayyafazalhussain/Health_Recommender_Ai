@@ -1,0 +1,131 @@
+.place-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 15px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.place-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+  border-color: #10B981;
+}
+
+.place-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.place-type {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.type-emoji {
+  font-size: 1rem;
+}
+
+.health-score {
+  background: linear-gradient(135deg, #10B981, #059669);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: bold;
+  display: flex;
+  align-items: baseline;
+}
+
+.score-value {
+  font-size: 1.1rem;
+}
+
+.score-label {
+  font-size: 0.8rem;
+  opacity: 0.9;
+  margin-left: 2px;
+}
+
+.place-name {
+  margin: 0 0 10px 0;
+  color: #111827;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.place-address {
+  margin: 0 0 15px 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.place-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stars {
+  color: #fbbf24;
+  font-size: 1rem;
+  letter-spacing: 1px;
+}
+
+.rating-value {
+  color: #4b5563;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.distance {
+  text-align: right;
+}
+
+.distance-value {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #111827;
+}
+
+.distance-label {
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin-left: 4px;
+}
+
+.view-button {
+  width: 100%;
+  background: #f3f4f6;
+  color: #374151;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.view-button:hover {
+  background: #10B981;
+  color: white;
+}
