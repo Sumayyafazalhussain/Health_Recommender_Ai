@@ -43,17 +43,35 @@
 #         log_level="info"
 #     )
 
+# 
+# run.py
+# import uvicorn
+# import sys
+# import os
+
+# sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+# if __name__ == "__main__":
+#     print("\n" + "="*60)
+#     print("🏥 STARTING HEALTH RECOMMENDER AI")
+#     print("="*60)
+    
+#     uvicorn.run(
+#         "app.main:app",
+#         host="0.0.0.0",
+#         port=8000,
+#         reload=True,
+#         log_level="info"
+#     )
+
+
 
 # run.py
 import uvicorn
-import sys
-import os
-
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 if __name__ == "__main__":
     print("\n" + "="*60)
-    print("🏥 STARTING HEALTH RECOMMENDER AI")
+    print("🏥 HEALTH RECOMMENDER AI - Neon PostgreSQL")
     print("="*60)
     
     uvicorn.run(

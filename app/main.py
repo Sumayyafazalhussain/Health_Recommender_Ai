@@ -1,122 +1,123 @@
-
-# from fastapi import FastAPI
-# from fastapi.middleware.cors import CORSMiddleware
-# from app.routes.admin import router as admin_router
-# from app.routes.recommend import router as recommend_router
-# from app.routes.locations import router as locations_router
-# from app.routes.image import router as image_router  # ADDED
-# from app.config import settings
-
-# app = FastAPI(
-#     title="Healthy Recommender Backend",
-#     description="AI-powered healthy alternative recommendations",
-#     version="1.0.0"
-# )
-
-# # Add CORS middleware
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["*"],
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
-
-# # Include routers
-# app.include_router(admin_router)
-# app.include_router(recommend_router)
-# app.include_router(locations_router)
-# app.include_router(image_router)  # ADDED
-
-# @app.get("/")
-# def root():
-#     return {
-#         "status": "ok", 
-#         "app": "Healthy Recommender Backend",
-#         "version": "1.0.0",
-#         "docs": "/docs",
-#         "endpoints": {
-#             "recommendations": "/api/recommend",
-#             "location_search": "/api/locations/search",
-#             "healthy_alternatives": "/api/locations/healthy-alternatives",
-#             "image_analysis": "/api/analyze-image",  # UPDATED
-#             "admin": "/admin"
-#         }
-#     }
-
-# @app.get("/health")
-# def health_check():
-#     return {"status": "healthy"}
-
-
 # app/main.py
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes.admin import router as admin_router
-from app.routes.recommend import router as recommend_router
-from app.routes.locations import router as locations_router
-from app.routes.image import router as image_router
-from app.config import settings  # Changed from 'app.config' to '.config'
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 app = FastAPI(
-    title="Healthy Recommender Backend",
-    description="AI-powered healthy alternative recommendations",
-    version="1.0.0",
-    docs_url="/docs",  # Explicitly enable Swagger
-    redoc_url="/redoc"  # Enable ReDoc as well
+    title="Health Recommender AI - Neon PostgreSQL",
+    description="Backend with Neon Serverless PostgreSQL Database",
+    version="2.0.0",
+    docs_url="/docs",
+    redoc_url="/redoc"
 )
 
-# Add CORS middleware
+# CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allows all origins
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],  # Allows all methods
-    allow_headers=["*"],  # Allows all headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
-# Include routers with prefixes
-app.include_router(admin_router, prefix="/api", tags=["Admin"])
-app.include_router(recommend_router, prefix="/api", tags=["Recommendations"])
-app.include_router(locations_router, prefix="/api", tags=["Locations"])
-app.include_router(image_router, prefix="/api", tags=["Image Analysis"])
+# ========== SIMPLE IMPORTS ==========
+try:
+    from app.routes.admin import router as admin_router
+    app.include_router(admin_router)
+    print("✅ Admin routes loaded")
+except Exception as e:
+    print(f"⚠️ Admin routes error: {e}")
 
-@app.get("/", tags=["Root"])
-def root():
-    """Root endpoint with API information"""
+try:
+    from app.routes.image import router as image_router
+    app.include_router(image_router)
+    print("✅ Image routes loaded")
+except Exception as e:
+    print(f"⚠️ Image routes error: {e}")
+
+try:
+    from app.routes.locations import router as locations_router
+    app.include_router(locations_router)
+    print("✅ Locations routes loaded")
+except Exception as e:
+    print(f"⚠️ Locations routes error: {e}")
+
+try:
+    from app.routes.neon_routes import router as neon_router
+    app.include_router(neon_router)
+    print("✅ Neon routes loaded")
+except Exception as e:
+    print(f"⚠️ Neon routes error: {e}")
+
+try:
+    from app.routes.recommend import router as recommend_router
+    app.include_router(recommend_router)
+    print("✅ Recommend routes loaded")
+except Exception as e:
+    print(f"⚠️ Recommend routes error: {e}")
+
+# ========== ENDPOINTS ==========
+@app.get("/")
+async def root():
     return {
-        "status": "ok", 
-        "app": "Healthy Recommender Backend",
-        "version": "1.0.0",
-        "docs": "/docs",
+        "status": "ok",
+        "app": "Health Recommender AI",
+        "version": "2.0.0",
+        "database": "Neon PostgreSQL",
         "endpoints": {
-            "recommendations": "/api/recommend",
-            "location_search": "/api/locations/search",
-            "healthy_alternatives": "/api/locations/healthy-alternatives",
-            "image_analysis": "/api/image/analyze",
-            "image_analysis_quick": "/api/image/analyze-quick",
-            "admin": "/admin"
+            "docs": "/docs",
+            "health": "/health",
+            "admin": "/admin/health",
+            "neon": "/api/neon/info",
+            "image": "/api/image/health",
+            "locations": "/api/locations/search",
+            "recommend": "/api/recommend"
         }
     }
 
-@app.get("/health", tags=["Health"])
-def health_check():
-    """Health check endpoint"""
-    return {"status": "healthy", "timestamp": "2024-12-18"}
-
-@app.get("/api/info", tags=["API Info"])
-def api_info():
-    """Detailed API information"""
-    return {
-        "name": "Healthy Recommender API",
-        "version": "1.0.0",
-        "description": "AI-powered food image analysis and healthy recommendations",
-        "contact": {
-            "name": "API Support",
-            "email": "support@example.com"
-        },
-        "license": {
-            "name": "MIT",
-            "url": "https://opensource.org/licenses/MIT"
+@app.get("/health")
+async def health():
+    try:
+        from app.services.neon_service import neon_db_service
+        db_health = neon_db_service.health_check()
+        return {
+            "status": "healthy",
+            "database": "neon_postgresql",
+            "database_status": db_health["status"],
+            "data_counts": db_health.get("counts", {}),
+            "timestamp": "2024-12-18T12:00:00Z"
         }
-    }
+    except Exception as e:
+        return {
+            "status": "degraded",
+            "database": "neon_postgresql",
+            "error": str(e)
+        }
+
+# ========== STARTUP ==========
+@app.on_event("startup")
+async def startup_event():
+    print("\n" + "="*60)
+    print("🚀 HEALTH RECOMMENDER AI BACKEND")
+    print("📊 Database: Neon PostgreSQL (Serverless)")
+    print("="*60)
+    
+    # Test Neon connection
+    try:
+        from app.db.neon_connection import test_connection
+        if test_connection():
+            print("✅ Neon PostgreSQL: CONNECTED")
+        else:
+            print("❌ Neon PostgreSQL: FAILED")
+    except Exception as e:
+        print(f"⚠️ Connection test error: {e}")
+    
+    print("\n🌐 API Endpoints:")
+    print("   • Swagger UI: http://localhost:8000/docs")
+    print("   • Health: http://localhost:8000/health")
+    print("   • Admin: http://localhost:8000/admin/health")
+    print("   • Neon Info: http://localhost:8000/api/neon/info")
+    print("="*60)
