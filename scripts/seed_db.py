@@ -33,6 +33,7 @@ def seed_complete_database():
         {"_id": "smoothie_shop", "name": "Smoothie Shop", "description": "Smoothie and juice bars", "is_unhealthy": False},
         {"_id": "park", "name": "Park", "description": "Public parks", "is_unhealthy": False},
         {"_id": "walking_trail", "name": "Walking Trail", "description": "Walking paths", "is_unhealthy": False},
+        
     ]
     
     db.categories.insert_many(categories)

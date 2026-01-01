@@ -1,7 +1,7 @@
 # app/routes/neon_routes.py
 from fastapi import APIRouter
 
-# CREATE THE ROUTER FIRST
+# Create router instance FIRST
 router = APIRouter(prefix="/api/neon", tags=["Neon PostgreSQL"])
 
 @router.get("/info")

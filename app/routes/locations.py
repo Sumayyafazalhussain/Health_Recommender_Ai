@@ -1,11 +1,27 @@
+
+# app/routes/locations.py
 from fastapi import APIRouter, HTTPException, Query
-from app.services.google_service import google_service
-from app.services.ai_service import ai_service
+from typing import Optional, Dict, Any
 import logging
 import math
 
-router = APIRouter(prefix="/api/locations", tags=["locations"])
 logger = logging.getLogger(__name__)
+
+# Create router FIRST
+router = APIRouter(prefix="/api/locations", tags=["locations"])
+
+def calculate_distance(lat1: float, lng1: float, lat2: float, lng2: float) -> int:
+    """Calculate distance between two coordinates in meters"""
+    try:
+        lat1, lng1, lat2, lng2 = map(math.radians, [lat1, lng1, lat2, lng2])
+        dlat = lat2 - lat1
+        dlng = lng2 - lng1
+        a = math.sin(dlat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlng/2)**2
+        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
+        R = 6371000
+        return int(R * c)
+    except:
+        return 99999
 
 @router.get("/search")
 async def search_nearby_locations(
@@ -18,6 +34,9 @@ async def search_nearby_locations(
     Search for specific nearby locations
     """
     try:
+        # Import inside function to avoid circular imports
+        from app.services.google_service import google_service
+        
         # Map search type to Google place types
         type_mapping = {
             "all": ["restaurant", "cafe", "gym", "bar", "park", "food"],
@@ -74,6 +93,10 @@ async def get_healthy_alternatives(
     Get healthy alternatives near a location
     """
     try:
+        # Import inside function to avoid circular imports
+        from app.services.google_service import google_service
+        from app.services.ai_service import ai_service
+        
         # Search for healthy places
         healthy_results = google_service.search_healthy_places_nearby(lat, lng, radius)
         
@@ -102,15 +125,16 @@ async def get_healthy_alternatives(
         logger.error(f"Healthy alternatives error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-def calculate_distance(lat1: float, lng1: float, lat2: float, lng2: float) -> int:
-    """Calculate distance between two coordinates in meters"""
-    try:
-        lat1, lng1, lat2, lng2 = map(math.radians, [lat1, lng1, lat2, lng2])
-        dlat = lat2 - lat1
-        dlng = lng2 - lng1
-        a = math.sin(dlat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlng/2)**2
-        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
-        R = 6371000
-        return int(R * c)
-    except:
-        return 99999
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,130 @@
+
+# # version: "3.8"
+
+# # services:
+# #   api:
+# #     build: .
+# #     ports:
+# #       - "8000:8000"
+# #     env_file:
+# #       - .env
+# #     environment:
+# #       - MONGO_URI=mongodb://mongo:27017
+# #     depends_on:
+# #       - mongo
+# #     volumes:
+# #       - ./:/app
+# #     restart: unless-stopped
+# #     command: >
+# #       sh -c "python scripts/seed_db.py &&
+# #              uvicorn app.main:app --host 0.0.0.0 --port 8000"
+# #     healthcheck:
+# #       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+# #       interval: 30s
+# #       timeout: 10s
+# #       retries: 3
+
+# #   mongo:
+# #     image: mongo:6
+# #     restart: unless-stopped
+# #     environment:
+# #       MONGO_INITDB_DATABASE: recommendation_db
+# #     volumes:
+# #       - mongo_data:/data/db
+# #     ports:
+# #       - "27017:27017"
+# #     healthcheck:
+# #       test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+# #       interval: 10s
+# #       timeout: 10s
+# #       retries: 5
+
+# # volumes:
+# #   mongo_data:
+
+# version: "3.8"
+
+# services:
+#   api:
+#     build: .
+#     ports:
+#       - "8000:8000"
+#     env_file:
+#       - .env
+#     environment:
+#       - POSTGRES_URL=postgresql://postgres:password@postgres:5432/health_recommender
+#       - DATABASE_TYPE=postgresql
+#     depends_on:
+#       - postgres
+#     volumes:
+#       - ./:/app
+#     restart: unless-stopped
+#     command: >
+#       sh -c "python scripts/migrate_to_postgresql.py &&
+#              uvicorn app.main:app --host 0.0.0.0 --port 8000"
+#     healthcheck:
+#       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+#       interval: 30s
+#       timeout: 10s
+#       retries: 3
+
+#   postgres:
+#     image: postgres:15
+#     restart: unless-stopped
+#     environment:
+#       POSTGRES_USER: postgres
+#       POSTGRES_PASSWORD: password
+#       POSTGRES_DB: health_recommender
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data
+#     ports:
+#       - "5432:5432"
+#     healthcheck:
+#       test: ["CMD-SHELL", "pg_isready -U postgres"]
+#       interval: 10s
+#       timeout: 5s
+#       retries: 5
+
+# volumes:
+#   postgres_data:
+
+version: "3.8"
+
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - POSTGRES_URL=${POSTGRES_URL}
+      - DATABASE_TYPE=neon
+      - MONGO_URI=mongodb://mongo:27017
+    depends_on:
+      - mongo
+    volumes:
+      - ./:/app
+    restart: unless-stopped
+    command: >
+      sh -c "python scripts/migrate_to_neon.py &&
+             uvicorn app.main:app --host 0.0.0.0 --port 8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  mongo:
+    image: mongo:6
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_DATABASE: recommendation_db
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "27017:27017"
+
+volumes:
+  mongo_data:

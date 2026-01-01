@@ -1,21 +1,29 @@
-# fastapi>=0.95.0
-# uvicorn[standard]>=0.18.0
-# pydantic>=2.4.0
-# pymongo>=4.14.0
-# python-dotenv>=1.0.0
-# httpx>=0.25.0
-# googlemaps>=4.10.0
-fastapi>=0.104.0
-uvicorn[standard]>=0.24.0
-pydantic>=2.5.0
-pymongo>=4.6.0
-python-dotenv>=1.0.0
-googlemaps>=4.10.0
-google-generativeai>=0.3.0  # Official Gemini SDK
-httpx>=0.25.0  # For async HTTP requests
-aiohttp>=3.8.0
-beautifulsoup4>=4.11.0
-lxml>=4.9.0
+# ========== CORE ==========
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+python-dotenv==1.0.0
+
+# ========== DATABASE ==========
+sqlalchemy==2.0.23
+psycopg2-binary==2.9.9
+asyncpg==0.29.0
+
+# ========== AUTHENTICATION ==========
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-multipart==0.0.6
+
+# ========== AI & APIs ==========
+google-generativeai==0.3.2
+googlemaps==4.10.0
+
+# ========== IMAGE PROCESSING ==========
+Pillow==10.1.0
+aiohttp==3.9.1
+requests==2.31.0
+
+# ========== UTILITIES ==========
+httpx==0.25.2
 beautifulsoup4==4.12.2
 lxml==4.9.3
-requests==2.31.0
